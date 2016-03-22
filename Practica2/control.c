@@ -100,7 +100,7 @@ int main(){
 	int fin = 0;
 	int* pfin = &fin;
 	char* comando;
-	static clase* pClases;
+	clase* pClases;
 	int errorComando = 0;
 	int* perrorComando = &errorComando;
 	int numClases = 0;
@@ -120,26 +120,26 @@ int main(){
 			*(pfin) = 1;
 		}else{
 			if(*(comando) == 'a'){
-				printf("A Introducir el identificador (número entero) de la clase a añadir: \n");
+				printf("Introducir el identificador (número entero) de la clase a añadir: \n");
 				scanf("%d", &identificador);
 				addClase(identificador, pClases, &numClases);
 			}else if(*(comando) == 'd'){
-				printf("D Introducir el identificador (número entero) de la clase a eliminar: ");
+				printf("Introducir el identificador (número entero) de la clase a eliminar: ");
 				scanf("%d", &identificador);
 				eliminarClase(identificador, pClases, &numClases);
 			}else if(*(comando) == 's'){
-				printf("S Introducir el identificador (número entero) de la clase a la que quiera subirle la temperatura 1 grado: ");
+				printf("Introducir el identificador (número entero) de la clase a la que quiera subirle la temperatura 1 grado: ");
 				scanf("%d", &identificador);
 				subirTemp(identificador, pClases, &numClases);
 			}else if(*(comando) == 'c'){
-				printf("C Introducir el identificador (número entero) de la clase que quiera conoces su estado: ");
+				printf("Introducir el identificador (número entero) de la clase que quiera conoces su estado: ");
 				scanf("%d", &identificador);
 				estadoClase(identificador, pClases, &numClases);
 			}else if(*(comando) == 'm'){
-				printf("M El estado de las clases es el siguiente: \n ");
+				printf("El estado de las clases es el siguiente: \n ");
 				monitor(pClases, &numClases);
 			}else if(*(comando) == 'q'){
-				printf("Q Finalizando la ejecución...");
+				printf("Finalizando la ejecución...");
 				salir(pClases, pfin);
 			}else if(*(comando) == 'h'){
 				printf("Los comandos que se pueden utilizar son los siguientes: \n a -> añadir una clase. Le pedirá el identificador de la nueva clase como un valor entero\n d -> eliminar clase. Le pedirá el identificador de la clase a eliminar como un valor entero\n s -> subir la temperatura de una clase 1 grado. Le pedirá el identificador de la clase como un valor entero\n c -> estado de una clase. Le pedirá el identificador de la clase. Imprime los valores de los sensores\n m -> monitorizar todo. Imprime los valores de los sensores de todas las clases\n q -> salir. Finaliza la ejecución del programa \n ");
