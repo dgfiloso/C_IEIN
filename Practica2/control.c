@@ -12,7 +12,7 @@ int eliminarClase(int id, clase* pClases, int* pNumClases);
 int subirTemp(int id, clase* pClases, int* pNumClases);
 int estadoClase(int id, clase* pClases, int* pNumClases);
 int monitor(clase* pClases, int* pNumClases);
-int salir(clase* pClases, int* fin);
+int salir(clase* pClases, int* fin, int* pNumClases);
 
 int addClase(int id, clase* pClases, int* pNumClases){
 	int i;
@@ -39,6 +39,7 @@ int addClase(int id, clase* pClases, int* pNumClases){
 int eliminarClase(int id, clase* pClases, int* pNumClases){
 	int i;
 	int j = 0;
+	int existeID = 0;
 	int numeroClases;
 	*(pNumClases) -= 1;
 	numeroClases = *(pNumClases);
@@ -53,30 +54,44 @@ int eliminarClase(int id, clase* pClases, int* pNumClases){
 				*(pClases + i - j) = *(pnuevaClase + i);
 			}else{
 				j=1;
+				existeID = 1;
 			}
 		}
 		free(pnuevaClase);
+	}
+	if(existeID == 0){
+		printf("El ID que se busca no existe \n");
 	}
 	return 0;
 }
 
 int subirTemp(int id, clase* pClases, int* pNumClases){
 	int i;
+	int existeID = 0;
 	for(i=0; i<(*(pNumClases)); i++){
 		if(((pClases+i)->id) == id){
 			((pClases+i)->temp)++;
+			existeID = 1;
 		}
+	}
+	if(existeID == 0){
+		printf("El ID que se busca no existe \n");
 	}
 	return 0;
 }
 
 int estadoClase(int id, clase* pClases, int* pNumClases){
 	int i;
+	int existeID = 0;
 	for(i=0; i<*(pNumClases); i++){
 		if(((pClases + i)->id) == id){
 			printf("ID: %d Temperatura: %d Luminosidad: %d Presencia: %d Lector RFID: %s \n", 
 				(pClases+i)->id,(pClases+i)->temp,(pClases+i)->lum,(pClases+i)->pres,(pClases+i)->lector);
+			existeID = 1;
 		}
+	}
+	if(existeID == 0){
+		printf("El ID que se busca no existe \n");
 	}
 	return 0;
 }
@@ -89,8 +104,10 @@ int monitor(clase* pClases, int* pNumClases){
 	return 0;
 }
 
-int salir(clase* pClases, int* fin){
-	free(pClases);
+int salir(clase* pClases, int* fin, int* pNumClases){
+	if(*(pNumClases) != 0){
+		free(pClases);
+	}
 	*(fin) = 1;
 	return 0;
 }
@@ -140,7 +157,7 @@ int main(){
 				monitor(pClases, &numClases);
 			}else if(*(comando) == 'q'){
 				printf("Finalizando la ejecución...");
-				salir(pClases, pfin);
+				salir(pClases, pfin, &numClases);
 			}else if(*(comando) == 'h'){
 				printf("Los comandos que se pueden utilizar son los siguientes: \n a -> añadir una clase. Le pedirá el identificador de la nueva clase como un valor entero\n d -> eliminar clase. Le pedirá el identificador de la clase a eliminar como un valor entero\n s -> subir la temperatura de una clase 1 grado. Le pedirá el identificador de la clase como un valor entero\n c -> estado de una clase. Le pedirá el identificador de la clase. Imprime los valores de los sensores\n m -> monitorizar todo. Imprime los valores de los sensores de todas las clases\n q -> salir. Finaliza la ejecución del programa \n ");
 			}else{
