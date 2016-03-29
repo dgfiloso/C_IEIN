@@ -7,62 +7,62 @@
 #include <stdlib.h>
 #include "control.h"
 
-int addClase(int id, clase* pClases, int* pNumClases);
-int eliminarClase(int id, clase* pClases, int* pNumClases);
+clase* addClase(int id, clase* pClases, int* pNumClases);
+clase* eliminarClase(int id, clase* pClases, int* pNumClases);
 int subirTemp(int id, clase* pClases, int* pNumClases);
 int estadoClase(int id, clase* pClases, int* pNumClases);
 int monitor(clase* pClases, int* pNumClases);
-int salir(clase* pClases, int* fin, int* pNumClases);
+clase* salir(clase* pClases, int* fin, int* pNumClases);
 
-int addClase(int id, clase* pClases, int* pNumClases){
+clase* addClase(int id, clase* pClases, int* pNumClases){
 	int i;
 	int numeroClases;
+	clase* ptempClases;
+	clase nuevaClase;
 	*(pNumClases) += 1;
 	numeroClases = *(pNumClases);
 	if(numeroClases == 1){
 		pClases = (clase*)malloc(numeroClases * sizeof(clase));
 	}else{
-		clase* pnuevaClase;
-		pnuevaClase = pClases;
+		ptempClases = pClases;
 		pClases = (clase*)realloc(pClases,numeroClases * sizeof(clase));
 		for(i=0; i<(*(pNumClases)-1); i++){
-		*(pClases + i) = *(pnuevaClase + i);
+		*(pClases + i) = *(ptempClases + i);
 		}
-		free(pnuevaClase);
+		free(ptempClases);
 	}
-	clase nuevaClase;
 	nuevaClase.id = id;
 	*(pClases + *(pNumClases) - 1) = nuevaClase;
-	return 0;
+	return pClases;
 }
 
-int eliminarClase(int id, clase* pClases, int* pNumClases){
+clase* eliminarClase(int id, clase* pClases, int* pNumClases){
 	int i;
 	int j = 0;
 	int existeID = 0;
 	int numeroClases;
+	clase* ptempClases;
 	*(pNumClases) -= 1;
 	numeroClases = *(pNumClases);
 	if(numeroClases == 0){
 		free(pClases);
 	}else{
-		clase* pnuevaClase;
-		pnuevaClase = pClases;
+		ptempClases = pClases;
 		pClases = (clase*) realloc(pClases,numeroClases * sizeof(clase));
 		for(i=0; i<(*(pNumClases)); i++){
 			if(((pClases+i)->id) != id){
-				*(pClases + i - j) = *(pnuevaClase + i);
+				*(pClases + i - j) = *(ptempClases + i);
 			}else{
 				j=1;
 				existeID = 1;
 			}
 		}
-		free(pnuevaClase);
+		free(ptempClases);
 	}
 	if(existeID == 0){
 		printf("El ID que se busca no existe \n");
 	}
-	return 0;
+	return pClases;
 }
 
 int subirTemp(int id, clase* pClases, int* pNumClases){
@@ -104,65 +104,53 @@ int monitor(clase* pClases, int* pNumClases){
 	return 0;
 }
 
-int salir(clase* pClases, int* fin, int* pNumClases){
+clase* salir(clase* pClases, int* fin, int* pNumClases){
 	if(*(pNumClases) != 0){
 		free(pClases);
 	}
 	*(fin) = 1;
-	return 0;
+	return pClases;
 }
 
 
 int main(){
 	int fin = 0;
 	int* pfin = &fin;
-	char* comando;
+	char comando;
 	clase* pClases;
-	int errorComando = 0;
-	int* perrorComando = &errorComando;
 	int numClases = 0;
 	int identificador, i;
 
 	printf("Programa iniciado correctamente...\n");
 	while(fin == 0){
 		printf("Introduzca el comando: \n");
-		scanf("%c", comando);
-		for(i=0; *(comando+i) == '\0'; i++){
-			if(*(comando+i)==' '){
-				*(perrorComando) = 1;
-			}
-		}
-		if(errorComando != 0){
-			printf("ERROR: Los comandos son solo una de las siguientes letras: a, d, s, c, m, q \n Si tiene alguna duda llame al comando 'h'\n ");
-			*(pfin) = 1;
+		scanf("%c", &comando);
+		if(comando == 'a'){
+			printf("Introducir el identificador (número entero) de la clase a añadir: \n");
+			scanf("%d", &identificador);
+			pClases = addClase(identificador, pClases, &numClases);
+		}else if(comando == 'd'){
+			printf("Introducir el identificador (número entero) de la clase a eliminar: \n");
+			scanf("%d", &identificador);
+			pClases = eliminarClase(identificador, pClases, &numClases);
+		}else if(comando == 's'){
+			printf("Introducir el identificador (número entero) de la clase a la que quiera subirle la temperatura 1 grado: \n");
+			scanf("%d", &identificador);
+			subirTemp(identificador, pClases, &numClases);
+		}else if(comando == 'c'){
+			printf("Introducir el identificador (número entero) de la clase que quiera conoces su estado: \n");
+			scanf("%d", &identificador);
+			estadoClase(identificador, pClases, &numClases);
+		}else if(comando == 'm'){
+			printf("El estado de las clases es el siguiente: \n ");
+			monitor(pClases, &numClases);
+		}else if(comando == 'q'){
+			printf("Finalizando la ejecución...");
+			pClases = salir(pClases, pfin, &numClases);
+		}else if(comando == 'h'){
+			printf("Los comandos que se pueden utilizar son los siguientes: \n a -> añadir una clase. Le pedirá el identificador de la nueva clase como un valor entero\n d -> eliminar clase. Le pedirá el identificador de la clase a eliminar como un valor entero\n s -> subir la temperatura de una clase 1 grado. Le pedirá el identificador de la clase como un valor entero\n c -> estado de una clase. Le pedirá el identificador de la clase. Imprime los valores de los sensores\n m -> monitorizar todo. Imprime los valores de los sensores de todas las clases\n q -> salir. Finaliza la ejecución del programa \n ");
 		}else{
-			if(*(comando) == 'a'){
-				printf("Introducir el identificador (número entero) de la clase a añadir: \n");
-				scanf("%d", &identificador);
-				addClase(identificador, pClases, &numClases);
-			}else if(*(comando) == 'd'){
-				printf("Introducir el identificador (número entero) de la clase a eliminar: ");
-				scanf("%d", &identificador);
-				eliminarClase(identificador, pClases, &numClases);
-			}else if(*(comando) == 's'){
-				printf("Introducir el identificador (número entero) de la clase a la que quiera subirle la temperatura 1 grado: ");
-				scanf("%d", &identificador);
-				subirTemp(identificador, pClases, &numClases);
-			}else if(*(comando) == 'c'){
-				printf("Introducir el identificador (número entero) de la clase que quiera conoces su estado: ");
-				scanf("%d", &identificador);
-				estadoClase(identificador, pClases, &numClases);
-			}else if(*(comando) == 'm'){
-				printf("El estado de las clases es el siguiente: \n ");
-				monitor(pClases, &numClases);
-			}else if(*(comando) == 'q'){
-				printf("Finalizando la ejecución...");
-				salir(pClases, pfin, &numClases);
-			}else if(*(comando) == 'h'){
-				printf("Los comandos que se pueden utilizar son los siguientes: \n a -> añadir una clase. Le pedirá el identificador de la nueva clase como un valor entero\n d -> eliminar clase. Le pedirá el identificador de la clase a eliminar como un valor entero\n s -> subir la temperatura de una clase 1 grado. Le pedirá el identificador de la clase como un valor entero\n c -> estado de una clase. Le pedirá el identificador de la clase. Imprime los valores de los sensores\n m -> monitorizar todo. Imprime los valores de los sensores de todas las clases\n q -> salir. Finaliza la ejecución del programa \n ");
-			}else{
-				printf("ERROR: Comando no reconocido como válido. Utilice el comando 'h' si necesita ayuda \n ");
-			}
+			printf("ERROR: Comando no reconocido como válido. Utilice el comando 'h' si necesita ayuda \n ");
 		}
 	}
 	return 0;
