@@ -1,0 +1,2 @@
+Los archivos control.c y control.h forman el programa
+Para compilar el programa, ejecutar la instruccion 'make control' en una terminal
