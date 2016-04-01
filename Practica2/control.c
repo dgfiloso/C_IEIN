@@ -23,6 +23,7 @@ int addClase(int id, clase** pClases, int* pNumClases){
 	int i;
 	int numeroClases;
 	clase nuevaClase;
+	clase* pTemp;
 			//Comprobamos si el ID ya existe
 	for(i=0;i<(*pNumClases);i++){
 		if(id == ((*pClases)+i)->id){
@@ -35,7 +36,11 @@ int addClase(int id, clase** pClases, int* pNumClases){
 	if(numeroClases == 1){
 		(*pClases) = (clase*)malloc(numeroClases * sizeof(clase));		//Reservamos memoria para una clase
 	}else{
+		pTemp = (*pClases);			//Apuntamos a la misma direccion para saber donde esta el contenido
 		(*pClases) = (clase*)realloc((*pClases),numeroClases * sizeof(clase));		//Reservamos memoria para tantas clases como vamos a tener
+		for(i=0;i<(numeroClases);i++){
+			*((*pClases) + i) = *(pTemp + i);		//Volvemos a almacenar el contenido por si se ha cambiado la direccion de memoria
+		}
 	}
 	nuevaClase.id = id;
 	nuevaClase.temp = 0;
