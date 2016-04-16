@@ -6,12 +6,14 @@
 // File: list.c
 // File history:
 //      v0.0: 10/04/2016: Creation
+//      v1.0: 15/04/2016: Added three new functions
 //
 // Description:   
 //
 // Definition of the linked list functions.
 //
 // Author: Ramiro Utrilla <rutrilla@die.upm.es>
+//          David González Filoso <d.gfiloso@alumnos.upm.es>
 //------------------------------------------------------------------------------
 #include <stdio.h>
 #include <stdlib.h>
@@ -90,7 +92,16 @@ int checkEntry ( room_t *head, int room_id ) {
 // Get an entry from the list
 room_t* getEntry ( room_t *head, int room_id ) {
 
-	// TODO
+	room_t *aux = head->next;
+
+    // Check all the linked list
+    while(aux!=NULL){
+        // Check if the room is the same
+        if(aux->room_id==room_id){
+            return aux;     // Return a pointer to the room_t
+        }
+        aux = aux->next;
+    }
 
     return NULL; // The room_id is not in the list
 }
@@ -219,9 +230,38 @@ int loadList ( room_t *head, char *fileName ) {
 // Store the list content in a file
 int storeList ( room_t *head, char *fileName ) {
 
-    // TODO
+    FILE *p_fichero;
+    char auxPres[4];
 
-    return ERROR;
+    room_t *aux = head->next;
+
+    if((p_fichero = fopen("lista.txt", "w"))==NULL){
+        return ERROR;
+    }
+
+    if(aux==NULL){
+        return ERROR;
+    }
+
+    while(aux!=NULL){
+        switch(aux->room_pres){
+            case YES: 
+                strcpy(auxPres,"YES");
+                break;
+            case NO:
+                strcpy(auxPres,"NO");
+                break;
+        }
+        fprintf(p_fichero, FILE_LINE_FORM, aux->room_id, aux->room_temp, auxPres, aux->room_alias);
+
+        aux = aux->next;
+    }
+
+    if(fclose(p_fichero)==EOF){
+        return ERROR;
+    }
+
+    return OK;
 }
 
 
@@ -285,7 +325,25 @@ room_t* popEntry ( room_t *head ) {
 // Sort the list in ascending order using the field room_id.
 int ascSorting ( room_t *head ) {
 	
-	// TODO
+	room_t *orden = head;
+    room_t *aux = (orden->next)->next;
+    room_t *temp;
 
-	return ERROR;
+    if(orden->next==NULL){
+        return ERROR;
+    }
+    while(orden!=NULL){
+        if(aux->room_id < (orden->next)->room_id){
+            temp = orden->next;
+            orden->next = aux;
+            aux->next = temp;
+        }
+        aux = aux->next;
+        if(aux==NULL){
+            orden =orden->next;
+            aux = (orden->next)->next;
+        }
+    }
+
+	return OK;
 }
