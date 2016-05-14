@@ -6,7 +6,7 @@
 // File: list.c
 // File history:
 //      v0.0: 10/04/2016: Creation
-//      v1.0: 15/04/2016: Added three new functions
+//      v1.0: 23/04/2016: Added three new functions
 //
 // Description:   
 //
@@ -235,7 +235,7 @@ int storeList ( room_t *head, char *fileName ) {
 
     room_t *aux = head->next;
 
-    if((p_fichero = fopen("lista.txt", "w"))==NULL){
+    if((p_fichero = fopen(fileName, "w"))==NULL){
         return ERROR;
     }
 
@@ -324,26 +324,41 @@ room_t* popEntry ( room_t *head ) {
 
 // Sort the list in ascending order using the field room_id.
 int ascSorting ( room_t *head ) {
+
+    int longitud = 0;
+    int i, j, cambios;
 	
 	room_t *orden = head;
-    room_t *aux = (orden->next)->next;
-    room_t *temp;
+    room_t *aux;   
+    
+    while(orden->next !=NULL){
+        longitud++;
+        orden = orden->next;
+    }
 
-    if(orden->next==NULL){
+    if( (orden = head) == NULL){
+        return ERROR;
+    }else if((aux = orden->next) == NULL){
         return ERROR;
     }
-    while(orden!=NULL){
-        if(aux->room_id < (orden->next)->room_id){
-            temp = orden->next;
-            orden->next = aux;
-            aux->next = temp;
-        }
-        aux = aux->next;
-        if(aux==NULL){
-            orden =orden->next;
-            aux = (orden->next)->next;
-        }
-    }
 
+    for(i=0;i<longitud-1;i++){
+        for(j=0;j<longitud-i-1;j++){
+            if(orden->next->room_id > aux->next->room_id){
+                orden->next = aux->next;
+                aux->next = orden->next->next;
+                orden->next->next = aux;
+                cambios = 1;
+            }
+            orden = orden->next;
+            if(cambios == 0){
+                aux = aux->next;
+            }
+            cambios = 0;  
+        }
+        orden = head;
+        aux = orden->next;
+    }
+    
 	return OK;
 }
