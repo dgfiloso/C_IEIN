@@ -46,9 +46,10 @@
 #include "presence_model.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "types.h"
 
 /**
- *  @brief Obserer Especifico. Vista
+ *  @brief Observer Especifico. Vista
  *
  *	Estructura que contiene nuestro Observer especifico. Este observer puede corresponderse con la interfaz grafica por consola o con la interfaz de texto
  *	Unicamente contiene su observer asociado ya que estas interfaces no necesitan manejar otro tipo de datos
@@ -66,6 +67,14 @@ typedef struct output_view_ {
  */
 output_view_t* graph_console_view_new (presence_model_t* m);
 
+/**
+ * @brief	Creo un nuevo objeto de nuestro observer especifico. Debo reservar memoria y enlazar la funcion notify del observer
+ * 			a la funcion que realiza mi accion de pintar por pantalla los datos. Hay que enlazar tambien el modelo a la referencia
+ * 			que tiene el propio observer. Finalmente anade el observer creado a la lista de observers del modelo.
+ * @param m Modelo de datos con el que trabaja el observer
+ * @return	Devuelve el puntero al nuevo objeto del tipo output_view_t
+ */
+output_view_t* text_console_view_new (presence_model_t* m);
 
 /**
  * @brief	Elimina el observer de la lista de observers del modelo y libera la memoria ocupada por el observer especifico

@@ -50,24 +50,24 @@ void print_distances(int numObjects, int* distances);
 
 /**
  * @brief		Funcion que se enlazara a la funcion notify() de nuestro observer especifico. Esta funcion debe llamar a la que pinta por pantalla
- * 				la informacion del modelo
+ * 				la informacion del modelo como una grafica
  * @param obs	Observer que contiene esta funcion
  */
 static void graph_console_view_print_distances (observer_t* obs);
 
+/**
+ * @brief				Funcion que se encarga de pintar de los datos por consola los objetos detectados a una determinada distancia
+ * @param numObjects	Numero de objetos detectados por el sensor que se van a pintar
+ * @param distances		Distancia de cada uno de los objetos detectados, ordenadas de menor a mayor
+ */
+void console_print(int numObjects, int* distances);
 
-output_view_t* graph_console_view_new (presence_model_t* m)
-{
-
-	output_view_t* v = (output_view_t*) malloc (sizeof (output_view_t));
-	v->obs.notify = graph_console_view_print_distances;
-	v->obs.model = m;
-
-	//XXX	Añadir el observer creado al modelo//
-
-  return v;
-}
-
+/**
+ * @brief		Funcion que se enlazara a la funcion notify() de nuestro observer especifico. Esta funcion debe llamar a la que pinta por pantalla
+ * 				la informacion del modelo 
+ * @param obs	Observer que contiene esta funcion
+ */
+static void text_console_view_print_distances (observer_t* obs);
 
 
 void output_view_destroy (output_view_t* v)
@@ -76,6 +76,21 @@ void output_view_destroy (output_view_t* v)
   free (v);
 }
 
+	/* --------------------	Vista grafica por consola 	---------------------- */
+
+output_view_t* graph_console_view_new (presence_model_t* m)
+{
+
+	output_view_t* v = (output_view_t*) malloc (sizeof (output_view_t));
+	v->obs.notify = graph_console_view_print_distances;
+	v->obs.model = m;
+
+	//XXX	AÃ±adir el observer creado al modelo//
+
+	add_observer(m, &(v->obs));
+	
+  return v;
+}
 
 static
 void graph_console_view_print_distances (observer_t* obs)
@@ -85,6 +100,7 @@ void graph_console_view_print_distances (observer_t* obs)
 
 	//XXX Pintar las distancias en el formato adecuado//
 
+	print_distances(s->numObjects, s->distances);
 }
 
 
@@ -108,4 +124,39 @@ void print_distances(int numObjects, int* distances){
 
 	printf("\n\n\n\n");
 
+}
+
+		/* -------------------	Vista datos por consola   ---------------------------- */
+
+output_view_t* text_console_view_new (presence_model_t* m){
+	
+	output_view_t* v = (output_view_t*) malloc (sizeof (output_view_t));
+	v->obs.notify = text_console_view_print_distances;
+	v->obs.model = m;
+
+	add_observer(m, &(v->obs));
+	
+  return v;
+
+}
+
+static void text_console_view_print_distances (observer_t* obs) {
+
+	presence_model_t* s = obs->model;
+
+	console_print(s->numObjects, s->distances);
+}
+
+void console_print(int numObjects, int* distances){
+	int i;
+
+	printf("Numero de objetos: %d\n", numObjects);
+
+	if(numObjects != 0){
+		for(i=0; i<numObjects; i++){
+			printf("Distancia objeto %d: %d metros\n", i, distances[i]);
+		}
+	}
+
+	printf("\n\n\n\n\n\n");
 }

@@ -119,5 +119,4 @@ void remove_observer (presence_model_t* m, observer_t* v);
  */
 void notify (presence_model_t* m);
 
-
 #endif /* PRESENCE_MODEL_H_ */

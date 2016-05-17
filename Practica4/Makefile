@@ -32,6 +32,9 @@ $(OBJS): $(HDRS)
 
 output_view.o: output_view.c
 	$(CC) $(CFLAGS) -c output_view.c
+
+file_view.o: file_view.c
+	$(CC) $(CFLAGS) -c file_view.c
 	
 presence_model.o: presence_model.c
 	$(CC) $(CFLAGS) -c presence_model.c

@@ -59,7 +59,14 @@ void model_destroy (presence_model_t* m){
 
 void add_observer (presence_model_t* m, observer_t* v)
 {
-	//XXX Añadir un nuevo observer y notificar//
+	//XXX AÃ±adir un nuevo observer y notificar//
+	
+	if(m->nobservers <= MAX_OBSERVERS) {
+		m->observers[m->nobservers] = v;
+		(m->nobservers)++;
+		notify(m);
+	}
+
 }
 
 void remove_observer (presence_model_t* m, observer_t* v)
@@ -76,6 +83,11 @@ void remove_observer (presence_model_t* m, observer_t* v)
 void notify (presence_model_t* m)
 {
 	//XXX Notificar a todos los observers asociados//
+	int i;
+
+	for (i=0; i<(m->nobservers); i++) {
+		m->observers[i]->notify(m->observers[i]);
+	}
 }
 
 
@@ -90,6 +102,12 @@ void insert_detected_objects (presence_model_t* m, int numObj, int* distances){
 	m->numObjects = numObj;
 
 	//XXX Actualizar los observers//
+
+	for (i=0; i<(m->nobservers); i++) {
+		m->observers[i]->model = m;
+	}
+
+	notify(m);
 }
 
 

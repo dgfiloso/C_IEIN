@@ -73,6 +73,9 @@ int main(void) {
 	presence_model_t* m = model_new();
 
 	output_view_t* v1 = graph_console_view_new (m);
+	output_view_t* v2 = text_console_view_new (m);
+	//file_view_t* v3 = file_view_new (m, "Output_1.txt");
+	//file_view_t* v4 = file_view_new (m, "Output_2.txt");
 
 
 	/**> Abrir el fichero con los datos de entrada */
@@ -84,16 +87,21 @@ int main(void) {
     while(retval != ERROR){/**> Bucle principal del programa. Cada segundo se lee una linea del fichero y se insertan los datos leidos en el modelo*/
 
 		//XXX Insertar los datos leidos en el modelo//
+    	insert_detected_objects(m, numObj, distances);
 
 		sleep(1);
 
 		//XXX Leer un nuevo dato del sensor//
+		retval = get_presence_data(&numObj, distances, f);
 	}
 
 	/**> Al acabar el programa cerrar el fichero y liberar memoria de los observers y del modelo observable (en ese orden)*/
 	fclose(f);
 
 	output_view_destroy (v1);
+	output_view_destroy (v2);
+	//file_view_destroy (v3);
+	//file_view_destroy (v4);
 
 	model_destroy (m);
 
