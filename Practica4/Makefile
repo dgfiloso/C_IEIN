@@ -18,14 +18,14 @@
 CC = gcc
 CFLAGS = -Wall
 
-OBJS = output_view.o presence_model.o Presence_Observer.o
-HDRS = output_view.h presence_model.h observer.h types.h
+OBJS = output_view.o file_view.o presence_model.o Presence_Observer.o 
+HDRS = output_view.h file_view.h presence_model.h observer.h types.h 
 
 # Executable
 EXE = Presence_Observer
 
 all: $(OBJS)
-	$(CC) $(CFLAGS) -o $(EXE) $(OBJS)
+	$(CC) $(CFLAGS) -g -o $(EXE) $(OBJS)
 
 $(OBJS): $(HDRS)
 

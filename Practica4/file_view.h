@@ -14,7 +14,7 @@
 
 typedef struct file_view_ {
 	observer_t obs;
-	char* fileName;
+	FILE* f;
 } file_view_t;
 
 /**

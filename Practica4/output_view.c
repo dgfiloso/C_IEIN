@@ -154,7 +154,7 @@ void console_print(int numObjects, int* distances){
 
 	if(numObjects != 0){
 		for(i=0; i<numObjects; i++){
-			printf("Distancia objeto %d: %d metros\n", i, distances[i]);
+			printf("Distancia objeto %d: %d metros\n", i+1, distances[i]);
 		}
 	}
 

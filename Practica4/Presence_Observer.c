@@ -74,8 +74,8 @@ int main(void) {
 
 	output_view_t* v1 = graph_console_view_new (m);
 	output_view_t* v2 = text_console_view_new (m);
-	//file_view_t* v3 = file_view_new (m, "Output_1.txt");
-	//file_view_t* v4 = file_view_new (m, "Output_2.txt");
+	file_view_t* v3 = file_view_new (m, "Output_1.txt");
+	file_view_t* v4 = file_view_new (m, "Output_2.txt");
 
 
 	/**> Abrir el fichero con los datos de entrada */
@@ -100,8 +100,8 @@ int main(void) {
 
 	output_view_destroy (v1);
 	output_view_destroy (v2);
-	//file_view_destroy (v3);
-	//file_view_destroy (v4);
+	file_view_destroy (v3);
+	file_view_destroy (v4);
 
 	model_destroy (m);
 
