@@ -64,7 +64,7 @@ void add_observer (presence_model_t* m, observer_t* v)
 	if(m->nobservers <= MAX_OBSERVERS) {
 		m->observers[m->nobservers] = v;
 		(m->nobservers)++;
-		notify(m);
+		//notify(m);
 	}
 
 }
