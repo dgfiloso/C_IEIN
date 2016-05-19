@@ -98,7 +98,7 @@ void insert_detected_objects (presence_model_t* m, int numObj, int* distances){
 
 	int i;
 
-	for(i=0; i<numObj; i++){
+	for(i=0; i<MAX_NUM_OBJECTS; i++){
 		m->distances[i] = distances[i];
 	}
 
