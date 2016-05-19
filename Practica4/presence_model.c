@@ -64,7 +64,10 @@ void add_observer (presence_model_t* m, observer_t* v)
 	if(m->nobservers <= MAX_OBSERVERS) {
 		m->observers[m->nobservers] = v;
 		(m->nobservers)++;
-		//notify(m);
+
+		// En nuestro caso no es necesario notificar ya que cuando creamos el objeto, 
+		// no es necesario actualizar las vistas
+		// notify(m);
 	}
 
 }
